@@ -4,7 +4,7 @@ Backend For MyLocalPortfolio
 
 # Documentation
 
-    this is a node js server built with express and mongodb as database , you need to setup your .env file and adjust cors.js to your based on your needs
+    this is a node js server built with express and mongodb as database , you need to setup your .env file and adjust cors.js based on your needs
 
 # starting guide
 
