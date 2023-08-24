@@ -18,11 +18,14 @@ const app = express();
 
 app.use(corsMiddleware);
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.get("/check", (req, res) => {
   res.send("ok");
 });
 
-app.use("/api/users", userRouter);
+app.use("/users", userRouter);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
