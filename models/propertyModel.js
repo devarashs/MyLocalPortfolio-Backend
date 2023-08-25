@@ -6,6 +6,8 @@ const propertySchema = new mongoose.Schema(
     category: { type: String, required: true },
     valuePerShare: { type: String, required: true },
     totalShareAmount: { type: String, required: true },
+    totalValue: { type: Number, required: true },
+
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

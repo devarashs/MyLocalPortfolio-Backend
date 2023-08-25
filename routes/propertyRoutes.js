@@ -14,19 +14,47 @@ propertyRouter.get(
   })
 );
 
+propertyRouter.get(
+  "/mine/:slug",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const property = await Property.find({
+      owner: req.user._id,
+      category: req.params.slug,
+    });
+
+    res.send(property);
+  })
+);
+
 propertyRouter.post(
   "/create",
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const newProperty = new Property({
-      tag: req.body.tag,
-      category: req.body.category,
-      valuePerShare: req.body.valuePerShare,
-      totalShareAmount: req.body.totalShareAmount,
+    const tagExists = await Property.findOne({
       owner: req.user._id,
+      tag: req.params.slug,
     });
-    const property = await newProperty.save();
-    res.send({ message: "Property Created", property });
+
+    if (tagExists) {
+      res.status(400).send({
+        message:
+          "Property with this tag already exists please just Edit the Old One!",
+      });
+    } else {
+      const totalValue =
+        parseInt(req.body.valuePerShare) * parseInt(req.body.totalShareAmount);
+      const newProperty = new Property({
+        tag: req.body.tag,
+        category: req.body.category,
+        valuePerShare: req.body.valuePerShare,
+        totalShareAmount: req.body.totalShareAmount,
+        totalValue: totalValue,
+        owner: req.user._id,
+      });
+      const property = await newProperty.save();
+      res.send({ message: "Property Created", property });
+    }
   })
 );
 
@@ -36,12 +64,14 @@ propertyRouter.put(
   expressAsyncHandler(async (req, res) => {
     const propertyId = req.params.id;
     const property = await Property.findById(propertyId);
+    const totalValue =
+      parseInt(req.body.valuePerShare) * parseInt(req.body.totalShareAmount);
     if (property) {
       tag = req.body.tag;
       category = req.body.category;
       valuePerShare = req.body.valuePerShare;
       totalShareAmount = req.body.totalShareAmount;
-      await property.save();
+      (totalValue = totalValue), await property.save();
       res.send({ message: "Property Updated" });
     } else {
       res.status(404).send({ message: "Property Not Found" });
