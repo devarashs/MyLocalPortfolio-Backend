@@ -63,17 +63,29 @@ propertyRouter.put(
   "/:id",
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const propertyId = req.params.id;
-    const property = await Property.findById(propertyId);
+    const property = await Property.findById(req.params.id);
     const totalValue =
       parseInt(req.body.valuePerShare) * parseInt(req.body.totalShareAmount);
     if (property) {
-      tag = req.body.tag;
-      category = req.body.category;
-      valuePerShare = req.body.valuePerShare;
-      totalShareAmount = req.body.totalShareAmount;
-      (totalValue = totalValue), await property.save();
+      property.valuePerShare = req.body.valuePerShare;
+      property.totalShareAmount = req.body.totalShareAmount;
+      property.totalValue = totalValue;
+      await property.save();
       res.send({ message: "Property Updated" });
+    } else {
+      res.status(404).send({ message: "Property Not Found" });
+    }
+  })
+);
+
+propertyRouter.delete(
+  "/:id",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const property = await Property.findById(req.params.id);
+    if (property) {
+      await property.deleteOne({ _id: property._id });
+      res.send({ message: "Property Deleted" });
     } else {
       res.status(404).send({ message: "Property Not Found" });
     }

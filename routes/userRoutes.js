@@ -16,6 +16,7 @@ userRouter.post(
           _id: user._id,
           name: user.name,
           email: user.email,
+          preferedCurrency: user.preferedCurrency,
           isAdmin: user.isAdmin,
           token: generateToken(user),
         });
@@ -32,6 +33,7 @@ userRouter.post(
     const newUser = new User({
       name: req.body.name,
       email: req.body.email,
+      preferedCurrency: req.body.preferedCurrency,
       password: bcrypt.hashSync(req.body.password),
     });
     const user = await newUser.save();
@@ -39,6 +41,7 @@ userRouter.post(
       _id: user._id,
       name: user.name,
       email: user.email,
+      preferedCurrency: user.preferedCurrency,
       isAdmin: user.isAdmin,
       token: generateToken(user),
     });
