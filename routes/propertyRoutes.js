@@ -43,7 +43,8 @@ propertyRouter.post(
       });
     } else {
       const totalValue =
-        parseInt(req.body.valuePerShare) * parseInt(req.body.totalShareAmount);
+        parseFloat(req.body.valuePerShare) *
+        parseFloat(req.body.totalShareAmount);
       const newProperty = new Property({
         tag: req.body.tag,
         category: req.body.category,
