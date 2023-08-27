@@ -2,7 +2,7 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import expressAsyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
-import { generateToken } from "../utils.js";
+import { generateToken, isAuth } from "../utils.js";
 
 const userRouter = express.Router();
 
@@ -16,7 +16,7 @@ userRouter.post(
           _id: user._id,
           name: user.name,
           email: user.email,
-          preferedCurrency: user.preferedCurrency,
+          preferredCurrency: user.preferredCurrency,
           isAdmin: user.isAdmin,
           token: generateToken(user),
         });
@@ -33,7 +33,7 @@ userRouter.post(
     const newUser = new User({
       name: req.body.name,
       email: req.body.email,
-      preferedCurrency: req.body.preferedCurrency,
+      preferredCurrency: req.body.preferredCurrency,
       password: bcrypt.hashSync(req.body.password),
     });
     const user = await newUser.save();
@@ -41,10 +41,60 @@ userRouter.post(
       _id: user._id,
       name: user.name,
       email: user.email,
-      preferedCurrency: user.preferedCurrency,
+      preferredCurrency: user.preferredCurrency,
       isAdmin: user.isAdmin,
       token: generateToken(user),
     });
+  })
+);
+
+userRouter.delete(
+  "/:id",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+      if (user.email === "admin@chill-hub.net") {
+        res.status(400).send({ message: "Can Not Delete Admin User" });
+        return;
+      }
+      await user.deleteOne({ _id: user._id });
+      res.send({ message: "User Deleted" });
+    } else {
+      res.status(404).send({ message: "User Not Found" });
+    }
+  })
+);
+
+userRouter.put(
+  "/profile/:id",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    console.log(req.body);
+    const user = await User.findById(req.user._id);
+    if (user.email === "admin@chill-hub.net") {
+      res.status(666).send({
+        message: "You Cant Change The MotherShip Email Address : ) </3",
+      });
+    } else if (user) {
+      if (req.body.type === "email") user.email = req.body.value;
+      if (req.body.type === "password")
+        user.password = bcrypt.hashSync(req.body.value, 8);
+      if (req.body.type === "name") user.name = req.body.value;
+      if (req.body.body == "preferredCurrency")
+        user.preferredCurrency = req.body.value;
+
+      const updatedUser = await user.save();
+      res.send({
+        name: updatedUser.name,
+        email: updatedUser.email,
+        preferredCurrency: updatedUser.preferredCurrency,
+        isAdmin: updatedUser.isAdmin,
+        token: generateToken(updatedUser),
+      });
+    } else {
+      res.status(404).send({ message: "User not found" });
+    }
   })
 );
 

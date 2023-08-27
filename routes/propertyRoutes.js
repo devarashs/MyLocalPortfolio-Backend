@@ -65,7 +65,8 @@ propertyRouter.put(
   expressAsyncHandler(async (req, res) => {
     const property = await Property.findById(req.params.id);
     const totalValue =
-      parseInt(req.body.valuePerShare) * parseInt(req.body.totalShareAmount);
+      parseFloat(req.body.valuePerShare) *
+      parseFloat(req.body.totalShareAmount);
     if (property) {
       property.valuePerShare = req.body.valuePerShare;
       property.totalShareAmount = req.body.totalShareAmount;
