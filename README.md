@@ -2,13 +2,15 @@
 
 Backend For MyLocalPortfolio
 
-# For Full Guide and Documentation Go To https://chill-hubs-organization.gitbook.io/my-local-portfolio-web-app/overview/what-we-do
+- For Full Guide and Documentation Go To https://chill-hubs-organization.gitbook.io/my-local-portfolio-web-app/overview/what-we-do
 
 # Documentation
 
     this is a node js server built with express and mongodb as database , you need to setup your .env file and adjust cors.js based on your needs
 
 # starting guide
+
+- For Full Guide and Documentation Go To https://chill-hubs-organization.gitbook.io/my-local-portfolio-web-app/overview/what-we-do
 
 - first setup a .env file and fill these with your parameters
 
