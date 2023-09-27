@@ -43,6 +43,7 @@ userRouter.post(
       email: user.email,
       preferredCurrency: user.preferredCurrency,
       isAdmin: user.isAdmin,
+      abyssBalance: 1024,
       token: generateToken(user),
     });
   })

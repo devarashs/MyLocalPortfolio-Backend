@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
     preferredCurrency: { type: String, required: true },
     password: { type: String, required: true },
     isAdmin: { type: Boolean, default: false, required: true },
+    abyssBalance: { type: String, required: true },
   },
   {
     timestamps: true,
