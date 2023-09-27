@@ -18,6 +18,8 @@ userRouter.post(
           email: user.email,
           preferredCurrency: user.preferredCurrency,
           isAdmin: user.isAdmin,
+          abyssBalance: user.abyssBalance,
+          isCreator: user.isCreator,
           token: generateToken(user),
         });
         return;
