@@ -5,6 +5,7 @@ import corsMiddleware from "./cors.js";
 import userRouter from "./routes/userRoutes.js";
 import propertyRouter from "./routes/propertyRoutes.js";
 import uploadRouter from "./routes/uploadRoutes.js";
+import cardRouter from "./routes/cardRoutes.js";
 
 dotenv.config();
 mongoose
@@ -30,6 +31,7 @@ app.get("/check", (req, res) => {
 app.use("/users", userRouter);
 app.use("/property", propertyRouter);
 app.use("/upload", uploadRouter);
+app.use("/cards", cardRouter);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
