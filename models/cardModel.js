@@ -29,6 +29,7 @@ const cardSchema = new mongoose.Schema(
     strategicCombatLevel: { type: Number, required: true },
     sacrificeLevel: { type: Number, required: true },
     confidenceLevel: { type: Number, required: true },
+    frameType: { type: Number, required: true },
 
     creator: {
       type: mongoose.Schema.Types.ObjectId,

@@ -1,7 +1,7 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import Card from "../models/cardModel.js";
-import { isAuth } from "../utils.js";
+import { isAdmin, isAuth, isCreator } from "../utils.js";
 
 const cardRouter = express.Router();
 
@@ -35,6 +35,7 @@ cardRouter.get(
 cardRouter.post(
   "/create",
   isAuth,
+  isCreator,
   expressAsyncHandler(async (req, res) => {
     const cardExists = await Card.findOne({
       owner: req.user._id,
@@ -72,6 +73,7 @@ cardRouter.post(
         strategicCombatLevel: req.body.strategicCombatLevel,
         sacrificeLevel: req.body.sacrificeLevel,
         confidenceLevel: req.body.confidenceLevel,
+        frameType: req.body.frameType,
         creator: req.user._id,
         owner: req.user._id,
       });
@@ -117,6 +119,7 @@ cardRouter.put(
       card.strategicCombatLevel = req.body.strategicCombatLevel;
       card.sacrificeLevel = req.body.sacrificeLevel;
       card.confidenceLevel = req.body.confidenceLevel;
+      card.frameType = req.body.frameType;
       card.creator = req.user._id;
       card.owner = req.user._id;
       await card.save();
@@ -130,6 +133,7 @@ cardRouter.put(
 cardRouter.delete(
   "/:id",
   isAuth,
+  isAdmin,
   expressAsyncHandler(async (req, res) => {
     const card = await Card.findById(req.params.id);
     if (card.creator !== req.user._id) {
